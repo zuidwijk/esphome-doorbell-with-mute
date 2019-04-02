@@ -1,0 +1,27 @@
+- alias: "Deurbel"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.deurbel
+    from: 'off'
+    to: 'on'
+  action:
+    service: notify.pushbullet
+    data:
+      message: "Deurbel gaat"
+      title: "Deurbel gaat"
+
+- alias: "Deurbel licht notificatie"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.deurbel
+    from: 'off'
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.mute_doorbell
+    state: 'on'
+  action:
+    service: light.turn_on
+    data:
+      entity_id: group.flashlight
+      flash: short
