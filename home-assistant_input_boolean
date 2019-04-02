@@ -1,0 +1,5 @@
+input_boolean:
+  mute_doorbell:
+    name: Deurbel stil
+    initial: off
+    icon: mdi:volume-off
