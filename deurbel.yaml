@@ -1,0 +1,48 @@
+esphome:
+  name: deurbel
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: "<your wifi ssid>"
+  password: "<secret_password>"
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+switch:
+  - platform: gpio
+    name: "Deurbel Relay"
+    id: relay
+    internal: true # NO NEED TO SEE IT IN HOMEASSISTANT
+    icon: mdi:alarm-bell
+    pin: 
+      number: D1 # D1 IS USED FOR RELAY ON WEMOS D1 RELAY SHIEL
+      inverted: false
+    
+binary_sensor:
+  - platform: gpio
+    pin: D2
+    name: "Deurbel" # DOORBELL BUTTON
+    #device_class: window
+    filters:
+      - delayed_on: 100ms   # THIS DOES THE DEBOUNCE
+      - delayed_off: 5000ms # THIS PREVENTS FROM MULTIPLE RANGS
+    on_press:
+      then:
+        - if:
+            condition:
+              binary_sensor.is_off: mute # IF MUTE DONT RING
+            then:
+              - switch.turn_on: relay
+              - delay: 1000ms
+              - switch.turn_off: relay
+  - platform: homeassistant
+    name: "Input Boolean From Home Assistant"
+    entity_id: input_boolean.mute_doorbell
+    id: mute
