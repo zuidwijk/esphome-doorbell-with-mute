@@ -31,7 +31,7 @@ binary_sensor:
     name: "Deurbel" # DOORBELL BUTTON
     #device_class: window
     filters:
-      - delayed_on: 100ms   # THIS DOES THE DEBOUNCE
+#      - delayed_on: 100ms   # THIS DOES THE DEBOUNCE <-- disabled, not needed as delayed_off prevents from...
       - delayed_off: 5000ms # THIS PREVENTS FROM MULTIPLE RANGS
     on_press:
       then:
@@ -40,7 +40,7 @@ binary_sensor:
               binary_sensor.is_off: mute # IF MUTE DONT RING
             then:
               - switch.turn_on: relay
-              - delay: 1000ms
+              - delay: 500ms
               - switch.turn_off: relay
   - platform: homeassistant
     name: "Input Boolean From Home Assistant"
